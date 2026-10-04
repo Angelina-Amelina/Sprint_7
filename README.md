@@ -63,3 +63,6 @@
 ```bash
 python -m pytest --alluredir=allure-results --clean-alluredir && allure generate allure-results --clean -o allure-report
 ```
+=======
+# Sprint_7
+>>>>>>> origin/main
