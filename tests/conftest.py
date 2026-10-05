@@ -3,6 +3,7 @@ from urls import BASE_URL, ORDERS_URL, COURIERS_URL
 from methods.order_methods import OrderMethods
 from methods.couriers_methods import CouriersMethods
 from helpers import DataGenerate
+from data import COURIER_DATA_2
 
 
 @pytest.fixture()
@@ -29,3 +30,24 @@ def courier():
 def authorize_courier(courier, courier_methods):
     response_data, _ = courier_methods.authorize_courier(courier[1])
     return response_data['id']
+
+
+@pytest.fixture()
+def courier_delete(courier_methods):
+    courier_data = []
+    yield courier_data
+
+    for payload in courier_data:
+        login_json, _ = courier_methods.authorize_courier(payload)
+        if 'id' in login_json:
+            courier_methods.delete_courier(login_json['id'])
+
+@pytest.fixture()
+def register_duplicate_courier(courier_methods):
+    payload = COURIER_DATA_2
+    courier_methods.create_new_courier(payload)
+    yield payload
+
+    login_json, _ = courier_methods.authorize_courier(payload)
+    if 'id' in login_json:
+        courier_methods.delete_courier(login_json['id'])
